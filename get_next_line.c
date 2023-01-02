@@ -6,7 +6,7 @@
 /*   By: jeongyle <jeongyle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 13:55:03 by jeongyle          #+#    #+#             */
-/*   Updated: 2022/12/31 19:10:46 by jeongyle         ###   ########.fr       */
+/*   Updated: 2023/01/02 19:27:05 by jeongyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +51,36 @@ t_list	*ft_findlst(t_list **lst, int fd)
 	return (find);
 }
 
-void	ft_lstclear(t_list **lst)
+void	ft_delnode(t_list **lst, t_list *node)
 {
-	t_list	*tmp;
+	t_list	*prev;
+	t_list	*item;
 
-	if (!lst)
-		return ;
-	while (*lst)
+	prev = *lst;
+	while (prev)
 	{
-		tmp = (*lst)->next;
-		free(*lst);
-		*lst = tmp;
+		if (prev->fd == node->fd)
+			break ;
+		prev = prev->next;
 	}
+	item = prev->next;
+	if (prev == *lst)
+	{
+		*lst = prev->next;
+		free(prev);
+	}
+	else if (item->next == NULL)
+		prev->next = NULL;
+	else
+		prev->next = item->next;
+	free(item);
 }
 
 char	*get_next_line(int fd)
 {
 	int				byte;
 	char			buff[BUFFER_SIZE + 1];
+	char			*result;
 	t_list			*node;
 	static t_list	*lst = NULL;
 
@@ -80,13 +92,11 @@ char	*get_next_line(int fd)
 		byte = read(fd, buff, BUFFER_SIZE);
 		if (byte <= 0)
 			break ;
-		if (ft_strjoin(node, buff, byte) < 0)
+		if (ft_strnode(node, buff, byte) >= 0)
 			break ;
 	}
-	if (byte <= 0 && !ft_findlst(&lst, fd)->str)
-	{
-		ft_lstclear(&lst);
-		return (NULL);
-	}
-	return (ft_newline(node));
+	result = ft_newline(node);
+	if (byte <= 0)
+		ft_delnode(&lst, node);
+	return (result);
 }

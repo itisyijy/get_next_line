@@ -6,53 +6,54 @@
 /*   By: jeongyle <jeongyle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 13:55:01 by jeongyle          #+#    #+#             */
-/*   Updated: 2022/12/31 19:15:56 by jeongyle         ###   ########.fr       */
+/*   Updated: 2023/01/02 19:29:18 by jeongyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_findnewline(char *str)
+int	ft_findlen(char *str, int nl, int end)
 {
-	while (*str)
-	{
-		if (*str == '\n')
-			return (1);
-		str++;
-	}
-	return (0);
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0' && str[i] != '\n')
+		i++;
+	if (str[i] == '\n' && nl)
+		return (i);
+	while (str[i] != '\0')
+		i++;
+	if (end)
+		return (i);
+	return (-1);
 }
 
-int	ft_strjoin(t_list *node, char *buff, int byte)
+int	ft_strnode(t_list *node, char *buff, int byte)
 {
 	int		i;
-	int		j;
 	int		len;
-	char	*line;
+	char	*result;
 
 	len = 0;
-	if (!(node->str))
-		node->str = buff;
-	else
+	if (node->str)
 		while ((node->str)[len])
 			len++;
-	line = (char *)malloc(len + byte + 1);
-	if (!line)
-		return (0);
+	result = (char *)malloc(len + byte + 1);
+	if (!result)
+		return (1);
 	i = -1;
 	while (++i < len)
-		line[i] = (node->str)[i];
-	j = -1;
-	while (++j < byte)
-		line[i + j] = buff[j];
-	line[i + j] = '\0';
-	node->str = line;
-	if (ft_findnewline(node->str))
-		return (-1);
-	return (len + byte);
+		result[i] = (node->str)[i];
+	i = -1;
+	while (++i < byte)
+		result[len + i] = buff[i];
+	result[len + byte] = '\0';
+	free(node->str);
+	node->str = result;
+	return (ft_findlen(node->str, 1, 0));
 }
 
-char	*ft_strdup(char *str, int len)
+char	*ft_substr(char *str, int start, int len)
 {
 	int		i;
 	char	*result;
@@ -60,39 +61,41 @@ char	*ft_strdup(char *str, int len)
 	i = 0;
 	result = (char *)malloc(len + 1);
 	if (!result)
-		return (0);
-	while (i < len)
+		return (NULL);
+	while (i <= len)
 	{
-		result[i] = str[i];
+		result[i] = str[start + i];
 		i++;
 	}
-	result[i] = '\0';
 	return (result);
 }
 
 char	*ft_newline(t_list *node)
 {
-	int		i;
-	int		j;
+	int		nl;
+	int		end;
 	char	*before;
 	char	*after;
 
-	if (!node->str)
+	if (!(node->str))
 		return (NULL);
-	i = 0;
-	while ((node->str)[i] != '\n' && (node->str)[i] != '\0')
-		i++;
-	if ((node->str)[i] == '\n')
-		i++;
-	before = ft_strdup((node->str), i);
+	nl = ft_findlen(node->str, 1, 0);
+	end = ft_findlen(node->str, 0, 1);
+	if (end - nl == 1 || nl < 0)
+	{
+		before = ft_substr(node->str, 0, end);
+		after = NULL;
+	}
+	else
+	{
+		before = ft_substr(node->str, 0, nl);
+		after = ft_substr(node->str, nl + 1, end - nl);
+		if (!after)
+			return (NULL);
+	}
 	if (!before)
-		return (0);
-	j = 0;
-	while ((node->str)[i + j] != '\0')
-		j++;
-	after = ft_strdup(&((node->str)[i]), j);
-	if (!after)
-		return (0);
+		return (NULL);
+	free(node->str);
 	node->str = after;
 	return (before);
 }
