@@ -6,7 +6,7 @@
 /*   By: jeongyle <jeongyle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 13:54:59 by jeongyle          #+#    #+#             */
-/*   Updated: 2023/01/02 19:23:20 by jeongyle         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:26:50 by jeongyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*get_next_line(int fd);
 
 int		ft_findlen(char *str, int nl, int end);
 int		ft_strnode(t_list *node, char *buff, int byte);
-char	*ft_substr(char *str, int start, int len);
+char	*ft_substr(char *str, int start, int len, int nl);
 char	*ft_newline(t_list *node);
 
 #endif

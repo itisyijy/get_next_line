@@ -6,7 +6,7 @@
 /*   By: jeongyle <jeongyle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 13:55:01 by jeongyle          #+#    #+#             */
-/*   Updated: 2023/01/02 19:29:18 by jeongyle         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:39:49 by jeongyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,21 @@ int	ft_strnode(t_list *node, char *buff, int byte)
 	return (ft_findlen(node->str, 1, 0));
 }
 
-char	*ft_substr(char *str, int start, int len)
+char	*ft_substr(char *str, int start, int len, int nl)
 {
 	int		i;
 	char	*result;
 
 	i = 0;
-	result = (char *)malloc(len + 1);
+	result = (char *)malloc(len + nl + 1);
 	if (!result)
 		return (NULL);
-	while (i <= len)
+	while (i < len + nl)
 	{
 		result[i] = str[start + i];
 		i++;
 	}
+	result[i] = '\0';
 	return (result);
 }
 
@@ -77,19 +78,17 @@ char	*ft_newline(t_list *node)
 	char	*before;
 	char	*after;
 
-	if (!(node->str))
-		return (NULL);
 	nl = ft_findlen(node->str, 1, 0);
 	end = ft_findlen(node->str, 0, 1);
 	if (end - nl == 1 || nl < 0)
 	{
-		before = ft_substr(node->str, 0, end);
+		before = ft_substr(node->str, 0, end, 0);
 		after = NULL;
 	}
 	else
 	{
-		before = ft_substr(node->str, 0, nl);
-		after = ft_substr(node->str, nl + 1, end - nl);
+		before = ft_substr(node->str, 0, nl, 1);
+		after = ft_substr(node->str, nl + 1, end - nl - 1, 0);
 		if (!after)
 			return (NULL);
 	}

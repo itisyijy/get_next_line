@@ -6,7 +6,7 @@
 /*   By: jeongyle <jeongyle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 13:55:03 by jeongyle          #+#    #+#             */
-/*   Updated: 2023/01/02 19:27:05 by jeongyle         ###   ########.fr       */
+/*   Updated: 2023/01/03 16:30:31 by jeongyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ char	*get_next_line(int fd)
 {
 	int				byte;
 	char			buff[BUFFER_SIZE + 1];
-	char			*result;
 	t_list			*node;
 	static t_list	*lst = NULL;
 
@@ -95,8 +94,9 @@ char	*get_next_line(int fd)
 		if (ft_strnode(node, buff, byte) >= 0)
 			break ;
 	}
-	result = ft_newline(node);
-	if (byte <= 0)
-		ft_delnode(&lst, node);
-	return (result);
+	if (node->str && byte >= 0)
+		return (ft_newline(node));
+	free(node->str);
+	ft_delnode(&lst, node);
+	return (NULL);
 }
