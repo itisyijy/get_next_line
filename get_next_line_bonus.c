@@ -6,11 +6,11 @@
 /*   By: jeongyle <jeongyle@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 13:55:03 by jeongyle          #+#    #+#             */
-/*   Updated: 2023/01/03 18:06:19 by jeongyle         ###   ########.fr       */
+/*   Updated: 2023/01/04 15:02:10 by jeongyle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 t_list	*ft_lstnew(int fd)
 {
