@@ -1,4 +1,3 @@
 # get_next_line
-1st try: 50
 
-2nd try: 125
+https://cdn.intra.42.fr/pdf/pdf/67964/en.subject.pdf
